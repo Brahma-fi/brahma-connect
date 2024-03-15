@@ -16,6 +16,7 @@ const Routes: React.FC = () => {
 
 const rootEl = document.getElementById('root')
 if (!rootEl) throw new Error('invariant violation')
+rootEl.style.height ='100%'
 const root = createRoot(rootEl)
 
 root.render(
