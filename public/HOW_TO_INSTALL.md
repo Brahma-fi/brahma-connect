@@ -1,4 +1,4 @@
-# How to install Console Kernel
+# How to install Brahma Connect
 
 This is an unpacked Chrome extension. To enable the extension in Chrome, follow these steps:
 

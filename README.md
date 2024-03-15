@@ -21,7 +21,7 @@ While the Brahma Connect extension undergoes the Chrome Web Store publishing pro
 
 ## How to install the built extension manually
 
-1. Download the extension from this Github repo **\_\_\_\_**
+1. Download the extension from this Github repo's [releases](https://github.com/Brahma-fi/brahma-connect/releases).
 2. At the bottom, under Assets, click on the zip file, to download it
 3. Open the Extension Management page by navigating to [chrome://extensions](chrome://extensions).
 4. Enable **Developer Mode** by clicking the toggle switch at the top right of the page.

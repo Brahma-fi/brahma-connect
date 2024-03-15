@@ -11,7 +11,7 @@ if (window.ethereum) {
   if (descriptor?.configurable === false) {
     // We got a problem: The provider is not configurable (most probably Rabby)
     alert(
-      'Console Kernel is unable to connect. In Rabby, flip the setting so it is banned and reload the page.'
+      'Brahma Connect is unable to connect. In Rabby, flip the setting so it is banned and reload the page.'
     )
   }
 }

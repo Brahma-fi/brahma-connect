@@ -43,7 +43,7 @@ const BrowserFrame: React.FC<Props> = ({ src }) => {
     <iframe
       id="kernel-frame"
       name="kernel-frame"
-      title="Console Kernel"
+      title="Brahma Connect"
       src={src}
       style={{
         width: '100%',

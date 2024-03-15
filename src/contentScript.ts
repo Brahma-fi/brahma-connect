@@ -2,7 +2,7 @@
 import { production } from './settings'
 import { KERNEL_MESSAGE_SEPARATOR, MessageType } from './types'
 
-const ALLOWED_ORIGINS = ['https://staging.console.brahma.fi']
+const ALLOWED_ORIGINS = ['https://console.brahma.fi']
 const SUPPORTED_CHAIN_IDS = ['1', '42161', '81457']
 
 window.addEventListener('message', function (ev: MessageEvent<string>) {
