@@ -1,0 +1,44 @@
+{
+  "name": "Brahma Connect",
+  "description": "Console connection mode for dApp interactions",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "favicon.png",
+    "32": "favicon.png",
+    "48": "favicon.png",
+    "128": "favicon.png"
+  },
+  "action": {
+    "default_title": "Brahma Connect"
+  },
+  "permissions": ["tabs", "declarativeNetRequest", "webRequest", "storage"],
+  "background": {
+    "service_worker": "build/background.js"
+  },
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "js": ["build/contentScript.js"]
+    },
+    {
+      "matches": ["https://staging.console.brahma.fi/account/*/kernel"],
+      "run_at": "document_idle",
+      "js": ["build/introduce.js"]
+    },
+    {
+      "matches": ["<all_urls>"],
+      "run_at": "document_end",
+      "js": ["build/launch.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

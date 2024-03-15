@@ -1,0 +1,16 @@
+node_modules
+public/build
+public/_metadata
+.env
+*.log
+brahma-connect.zip
+
+.vscode
+.DS_STORE
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
