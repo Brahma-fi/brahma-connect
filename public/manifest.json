@@ -31,7 +31,7 @@
       "js": ["build/introduce.js"]
     },
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://console.brahma.fi/account/*"],
       "run_at": "document_end",
       "js": ["build/launch.js"]
     }
