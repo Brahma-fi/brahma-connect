@@ -2,7 +2,7 @@
   "name": "Brahma Connect",
   "description": "Console connection mode for dApp interactions",
   "version": "1.0.0",
-  "version_name": "1.0 beta",
+  "version_name": "1.0",
   "manifest_version": 3,
   "icons": {
     "16": "favicon.png",
