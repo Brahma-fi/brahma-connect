@@ -9,6 +9,10 @@ type Props = {
   src: string
 }
 
+declare let window: Window & {
+  handleBridgeHost: ((ev: MessageEvent<any>) => void) | undefined
+}
+
 const BrowserFrame: React.FC<Props> = ({ src }) => {
   const provider = useProvider()
   const { connection } = useConnection()
@@ -32,10 +36,11 @@ const BrowserFrame: React.FC<Props> = ({ src }) => {
       bridgeHost.handleMessage(ev)
     }
 
-    window.addEventListener('message', handle)
+    if (!window.handleBridgeHost) {
+      console.log('setting handle bridge host')
+      window.handleBridgeHost = handle
 
-    return () => {
-      window.removeEventListener('message', handle)
+      window.addEventListener('message', handle)
     }
   }, [bridgeHost])
 
