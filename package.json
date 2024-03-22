@@ -1,6 +1,6 @@
 {
   "name": "brahma-connect",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chained execution tool for console.brahma.fi",
   "main": "index.js",
   "repository": "https://github.com/Brahma-fi/brahma-connect.git",
