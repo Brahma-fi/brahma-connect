@@ -17,7 +17,13 @@ Brahma Connect is built with a strong emphasis on security, notably eliminating 
 
 # Installation
 
-While the Brahma Connect extension undergoes the Chrome Web Store publishing process, we are releasing a beta version of Brahma Connect on Blast L2 chain, which requires manual installation. Once the official extension is published, users will be able to install it directly from its Chrome Web Store page.
+## How to install from chrome web-store
+
+1. Head to the [Brahma Connect Chrome extension page](https://chromewebstore.google.com/detail/brahma-connect/dpojflnceofkedcemfannifplmhaloma).
+2. Click 'Add to Chrome' to install the Brahma Connect extension.
+3. After installation, return to your Console and refresh the page to activate.
+
+For optimal performance, use Metamask or similar wallets; Rabby and Phantom are not supported due to connection limitations.
 
 ## How to install the built extension manually
 
