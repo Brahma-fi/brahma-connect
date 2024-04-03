@@ -17,7 +17,7 @@ on:
 jobs:
   build-extension:
     name: Build extension
-    runs-on: ARM64
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
