@@ -17,7 +17,7 @@ on:
 jobs:
   build-extension:
     name: Build extension
-    runs-on: self-hosted
+    runs-on: ARM64
     steps:
       - uses: actions/checkout@v4
 
@@ -38,4 +38,5 @@ jobs:
         with:
           name: brahma-connect
           path: ./brahma-connect.zip
+
           if-no-files-found: error
