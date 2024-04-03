@@ -26,6 +26,9 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: Set yarn version
+        run: yarn set version 3.7.0
+
       - name: Run yarn
         run: |
           yarn --frozen-lockfile
