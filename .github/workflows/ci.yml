@@ -26,6 +26,9 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Set yarn version
         run: yarn set version 3.7.0
 
