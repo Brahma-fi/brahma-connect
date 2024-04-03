@@ -35,6 +35,9 @@ jobs:
       - name: Clean yarn cache
         run: yarn cache clean --all
 
+      - name: Disable immutable installs
+        run: yarn config set -H enableImmutableInstalls false
+
       - name: Run yarn
         run: |
           yarn
