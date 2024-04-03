@@ -32,6 +32,9 @@ jobs:
       - name: Set yarn version
         run: yarn set version 3.7.0
 
+      - name: Clean yarn cache
+        run: yarn cache clean --all
+
       - name: Run yarn
         run: |
           yarn
