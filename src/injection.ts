@@ -11,7 +11,7 @@ if (window.ethereum) {
   if (descriptor?.writable === false) {
     // We got a problem: The provider is not configurable (most probably Rabby)
     alert(
-      'Brahma Connect is unable to connect. In Rabby, flip the setting so it is banned and reload the page.'
+      `Brahma Connect cannot operate with the Rabby extension active. Please disable Rabby from your browser's extension page to use Connect. We're working with Rabby to resolve this issue.`
     )
   }
 }
