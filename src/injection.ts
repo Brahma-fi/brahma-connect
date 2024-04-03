@@ -8,7 +8,7 @@ declare let window: Window & {
 if (window.ethereum) {
   // There is already a provider injected
   const descriptor = Object.getOwnPropertyDescriptor(window, 'ethereum')
-  if (descriptor?.configurable === false) {
+  if (descriptor?.writable === false) {
     // We got a problem: The provider is not configurable (most probably Rabby)
     alert(
       'Brahma Connect is unable to connect. In Rabby, flip the setting so it is banned and reload the page.'

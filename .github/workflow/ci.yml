@@ -1,0 +1,41 @@
+name: CI
+on:
+  workflow_dispatch:
+    inputs:
+      ci:
+        description: 'CI'
+        required: false
+        default: ''
+        type: choice
+        options:
+          - 'CI'
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-extension:
+    name: Build extension
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Run yarn
+        run: |
+          yarn --frozen-lockfile
+
+      - name: Build and bundle
+        run: yarn bundle
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: brahma-connect
+          path: ./brahma-connect.zip
+          if-no-files-found: error

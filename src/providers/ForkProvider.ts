@@ -80,7 +80,7 @@ class ForkProvider extends EventEmitter {
 
     switch (method) {
       case 'wallet_switchEthereumChain': {
-        return null
+        return true
       }
 
       case 'wallet_requestPermissions':
@@ -157,7 +157,7 @@ class ForkProvider extends EventEmitter {
     }
 
     const response = await this.provider.request(request)
-    if (!!id) this.rpcRequestResponses[id] = response
+    if (id) this.rpcRequestResponses[id] = response
 
     return response
   }
