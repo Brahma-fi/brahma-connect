@@ -17,7 +17,7 @@ on:
 jobs:
   build-extension:
     name: Build extension
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -26,9 +26,21 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Set yarn version
+        run: yarn set version 3.7.0
+
+      - name: Clean yarn cache
+        run: yarn cache clean --all
+
+      - name: Disable immutable installs
+        run: yarn config set -H enableImmutableInstalls false
+
       - name: Run yarn
         run: |
-          yarn --frozen-lockfile
+          yarn
 
       - name: Build and bundle
         run: yarn bundle
@@ -38,4 +50,5 @@ jobs:
         with:
           name: brahma-connect
           path: ./brahma-connect.zip
+
           if-no-files-found: error
