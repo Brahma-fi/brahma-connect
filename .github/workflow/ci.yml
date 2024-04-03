@@ -13,7 +13,6 @@ on:
 jobs:
   build-extension:
     name: Build extension
-    runs-on: ARM64
     steps:
       - uses: actions/checkout@v4
 
