@@ -9,10 +9,6 @@ on:
         type: choice
         options:
           - 'CI'
-  pull_request:
-  push:
-    branches:
-      - main
 
 jobs:
   build-extension:
