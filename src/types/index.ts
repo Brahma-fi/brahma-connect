@@ -1,9 +1,13 @@
+export * from './contracts'
+
 export const KERNEL_MESSAGE_SEPARATOR = '%'
 
 export enum MessageType {
   LOADED_KERNEL_URL = 'loadedKernelURL',
   ERROR = 'errorKernel',
   UPDATE_RPC_CONFIG = 'updateRpcConfig',
+  KERNEL_SIGNATURE_REQUEST = 'kernelSignatureRequest',
+  KERNEL_SIGNATURE_RESPONSE = 'kernelSignatureResponse',
 }
 
 export enum ProviderType {
