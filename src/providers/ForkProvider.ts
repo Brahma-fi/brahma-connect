@@ -75,7 +75,7 @@ class ForkProvider extends EventEmitter {
 
     switch (method) {
       case 'wallet_switchEthereumChain': {
-        return true
+        return null
       }
 
       case 'wallet_requestPermissions':
@@ -106,6 +106,7 @@ class ForkProvider extends EventEmitter {
 
       // Uniswap will try to use this for ERC-20 permits, but we prefer to do a regular approval as part of the batch
       case 'personal_sign':
+      case 'eth_signTypedData':
       case 'eth_signTypedData_v4': {
         let consoleThreshold
 
