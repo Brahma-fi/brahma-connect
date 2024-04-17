@@ -152,10 +152,11 @@ class ForkProvider extends EventEmitter {
 
         // Expect response from UI, in format - MESSAGE%SIGNATURE
         window.addEventListener('message', ({ data }) => {
-          if (data instanceof String) {
+          if (typeof data === 'string') {
             const [messageType, signature] = data.split(
               KERNEL_MESSAGE_SEPARATOR
             )
+            console.log('sig event listener message', messageType, signature)
 
             if (messageType === MessageType.KERNEL_SIGNATURE_RESPONSE) {
               receivedSignature = signature
