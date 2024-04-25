@@ -154,7 +154,7 @@ class ForkProvider extends EventEmitter {
         window.postMessage(kernelSignatureReq)
 
         // Expect response from UI, in format - MESSAGE%SIGNATURE
-        window.addEventListener('message', ({ data }) => {
+        const signatureResponseHandler = ({ data }: MessageEvent<any>) => {
           if (typeof data === 'string') {
             const [messageType, signature] = data.split(
               KERNEL_MESSAGE_SEPARATOR
@@ -163,9 +163,11 @@ class ForkProvider extends EventEmitter {
 
             if (messageType === MessageType.KERNEL_SIGNATURE_RESPONSE) {
               receivedSignature = signature
+              window.removeEventListener('message', signatureResponseHandler)
             }
           }
-        })
+        }
+        window.addEventListener('message', signatureResponseHandler)
 
         // Wait till signature is received; timeout in 2mins
         const SECOND = 1000
