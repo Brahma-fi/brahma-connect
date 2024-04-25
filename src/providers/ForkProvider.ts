@@ -123,7 +123,7 @@ class ForkProvider extends EventEmitter {
             }),
             16
           )
-          console.log('consoleOwners', consoleThreshold)
+          console.log('consoleThreshold', consoleThreshold)
         } catch (e) {
           window.postMessage(
             `${MessageType.ERROR}${KERNEL_MESSAGE_SEPARATOR}An error occurred`
@@ -141,12 +141,15 @@ class ForkProvider extends EventEmitter {
 
         let receivedSignature
 
-        // Post request to UI, to request user signature in format - MESSAGE%METHOD%STRINGIFIED_PARAMS
+        // Post request to UI, to request user signature in format - MESSAGE%METHOD%ADDRESS%CHALLENGE
+        const isPersonalSign = method === 'personal_sign'
         const kernelSignatureReq = `${
           MessageType.KERNEL_SIGNATURE_REQUEST
-        }${KERNEL_MESSAGE_SEPARATOR}${method}${KERNEL_MESSAGE_SEPARATOR}${JSON.stringify(
-          params
-        )}`
+        }${KERNEL_MESSAGE_SEPARATOR}${method}${KERNEL_MESSAGE_SEPARATOR}${
+          isPersonalSign ? params[1] : params[0]
+        }${KERNEL_MESSAGE_SEPARATOR}${
+          isPersonalSign ? params[0] : JSON.stringify(JSON.parse(params[1]))
+        }`
         console.log({ kernelSignatureReq })
         window.postMessage(kernelSignatureReq)
 
