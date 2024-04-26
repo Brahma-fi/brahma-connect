@@ -11,17 +11,12 @@ import {
   MessageType,
   TransactionData,
   TransactionParamsMetadata,
+  safeInterface,
 } from '../types'
 import { ConsoleHypervisorProvider } from './ProvideConsoleHypervisor'
 import { hexlify } from 'ethers/lib/utils'
 
-import { Interface } from '@ethersproject/abi'
-
-const safeInterface = new Interface([
-  'function execTransaction(address to, uint256 value, bytes data, uint8 operation, uint256 safeTxGas, uint256 baseGas, uint256 gasPrice, address gasToken, address refundReceiver, bytes signatures) returns (bool success)',
-  'function changeThreshold(uint256 _threshold)',
-  'function addOwnerWithThreshold(address owner, uint256 _threshold)',
-])
+import { timeout } from '../utils'
 
 class UnsupportedMethodError extends Error {
   code = 4200
@@ -41,7 +36,7 @@ class ForkProvider extends EventEmitter {
 
   private blockGasLimitPromise: Promise<number>
 
-  private rpcRequestResponses: { [x: number]: Object }
+  private rpcRequestResponses: { [x: number]: object }
 
   constructor(
     provider: ConsoleHypervisorProvider,
@@ -80,7 +75,7 @@ class ForkProvider extends EventEmitter {
 
     switch (method) {
       case 'wallet_switchEthereumChain': {
-        return true
+        return null
       }
 
       case 'wallet_requestPermissions':
@@ -110,12 +105,91 @@ class ForkProvider extends EventEmitter {
       }
 
       // Uniswap will try to use this for ERC-20 permits, but we prefer to do a regular approval as part of the batch
+      case 'personal_sign':
+      case 'eth_signTypedData':
       case 'eth_signTypedData_v4': {
-        const unsupportedError = 'eth_signTypedData_v4 is not supported'
-        window.postMessage(
-          `${MessageType.ERROR}${KERNEL_MESSAGE_SEPARATOR}${unsupportedError}`
-        )
-        throw new UnsupportedMethodError(unsupportedError)
+        let consoleThreshold
+
+        try {
+          consoleThreshold = parseInt(
+            await this.provider.request({
+              method: 'eth_call',
+              params: [
+                {
+                  to: this.consoleAddress,
+                  data: safeInterface.encodeFunctionData('getThreshold', []),
+                },
+              ],
+            }),
+            16
+          )
+          console.log('consoleThreshold', consoleThreshold)
+        } catch (e) {
+          window.postMessage(
+            `${MessageType.ERROR}${KERNEL_MESSAGE_SEPARATOR}An error occurred`
+          )
+          throw new Error('Failed to fetch threshold')
+        }
+
+        if (consoleThreshold !== 1) {
+          const unsupportedError = `${method} is only supported on single threshold consoles`
+          window.postMessage(
+            `${MessageType.ERROR}${KERNEL_MESSAGE_SEPARATOR}${unsupportedError}`
+          )
+          throw new UnsupportedMethodError(unsupportedError)
+        }
+
+        let receivedSignature
+
+        // Post request to UI, to request user signature in format - MESSAGE%METHOD%ADDRESS%CHALLENGE
+        const isPersonalSign = method === 'personal_sign'
+        const kernelSignatureReq = `${
+          MessageType.KERNEL_SIGNATURE_REQUEST
+        }${KERNEL_MESSAGE_SEPARATOR}${method}${KERNEL_MESSAGE_SEPARATOR}${
+          isPersonalSign ? params[1] : params[0]
+        }${KERNEL_MESSAGE_SEPARATOR}${
+          isPersonalSign ? params[0] : JSON.stringify(JSON.parse(params[1]))
+        }`
+        console.log({ kernelSignatureReq })
+        window.postMessage(kernelSignatureReq)
+
+        // Expect response from UI, in format - MESSAGE%SIGNATURE
+        const signatureResponseHandler = ({ data }: MessageEvent<any>) => {
+          if (typeof data === 'string') {
+            const [messageType, signature] = data.split(
+              KERNEL_MESSAGE_SEPARATOR
+            )
+            console.log('sig event listener message', messageType, signature)
+
+            if (messageType === MessageType.KERNEL_SIGNATURE_RESPONSE) {
+              receivedSignature = signature
+              window.removeEventListener('message', signatureResponseHandler)
+            }
+          }
+        }
+        window.addEventListener('message', signatureResponseHandler)
+
+        // Wait till signature is received; timeout in 2mins
+        const SECOND = 1000
+        const MAX_RETRIES = 120
+
+        let numAttempts = 0
+
+        while (!receivedSignature) {
+          if (numAttempts++ >= MAX_RETRIES) {
+            const timeoutError = 'Signature timed out. Please retry'
+            window.postMessage(
+              `${MessageType.ERROR}${KERNEL_MESSAGE_SEPARATOR}${timeoutError}`
+            )
+            throw new Error(timeoutError)
+          }
+
+          // TODO: remove log
+          console.log('sig attempt:', numAttempts)
+          await timeout(SECOND)
+        }
+
+        return receivedSignature
       }
 
       case 'eth_sendTransaction': {
