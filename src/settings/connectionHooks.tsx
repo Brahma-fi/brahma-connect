@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { Eip1193Provider } from '../types'
 
 declare global {
@@ -8,7 +6,7 @@ declare global {
   }
 }
 
-export const useConnection = (id?: string) => {
+export const getConnection = () => {
   const windowHref = window.location.href
 
   const regex = /\/account\/([^\/]+)\/kernel/
@@ -24,7 +22,7 @@ export const useConnection = (id?: string) => {
   }
 
   const connectionIdName = new Date().getTime()
-  const [connection] = useState({
+  return {
     connection: {
       id: connectionIdName,
       consoleAddress,
@@ -35,7 +33,5 @@ export const useConnection = (id?: string) => {
     provider: window.ethereum,
     /// NOTE: chain ID here is the default value and will be overriden later upon receiving chain ID from UI
     chainId: 1,
-  })
-
-  return connection
+  }
 }
