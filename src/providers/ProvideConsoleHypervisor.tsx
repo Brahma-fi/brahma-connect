@@ -3,7 +3,7 @@ import EventEmitter from 'events'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import React, { useContext, useEffect, useState } from 'react'
 
-import { useConnection } from '../settings/connectionHooks'
+import { getConnection } from '../settings/connectionHooks'
 import { Eip1193Provider, JsonRpcRequest } from '../types'
 import { useBeforeUnload } from '../utils'
 import { HYPERVISOR_BASE_URL } from '../settings'
@@ -17,13 +17,13 @@ export const useConsoleHypervisorProvider =
 const ProvideConsoleHypervisor: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { provider, chainId, connection } = useConnection()
-  const { consoleAddress } = connection
-
   const [consoleHypervisorProvider, setConsoleHypervisorProvider] =
     useState<ConsoleHypervisorProvider | null>(null)
 
   useEffect(() => {
+    const { provider, chainId, connection } = getConnection()
+    const { consoleAddress } = connection
+
     console.log('provide consoleHypervisor', provider, chainId, connection)
     if (!chainId) return
 
@@ -37,7 +37,7 @@ const ProvideConsoleHypervisor: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       consoleHypervisorProvider.deleteFork()
     }
-  }, [provider, chainId])
+  }, [])
 
   useBeforeUnload(() => {
     if (consoleHypervisorProvider) consoleHypervisorProvider.deleteFork()
@@ -114,7 +114,7 @@ export class ConsoleHypervisorProvider extends EventEmitter {
     this.forkProviderPromise = undefined
     this.blockNumber = 19027441
 
-    if (!!provider) await provider.send('console_reset', [this.consoleAddress])
+    if (provider) await provider.send('console_reset', [this.consoleAddress])
   }
 
   private async createFork(networkId: number): Promise<JsonRpcProvider> {

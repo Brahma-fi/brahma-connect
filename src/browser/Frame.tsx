@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import BridgeHost from '../bridge/host'
-import { useConnection } from '../settings'
+import { getConnection } from '../settings'
 
 import { useProvider } from './ProvideProvider'
 
@@ -15,10 +15,10 @@ declare let window: Window & {
 
 const BrowserFrame: React.FC<Props> = ({ src }) => {
   const provider = useProvider()
-  const { connection } = useConnection()
   const [bridgeHost, setBridgeHost] = useState<BridgeHost | null>(null)
 
   useEffect(() => {
+    const { connection } = getConnection()
     if (!provider || !connection) return
 
     if (!bridgeHost) {

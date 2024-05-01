@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useMemo } from 'react'
 
 import { ForkProvider, useConsoleHypervisorProvider } from '../providers'
-import { useConnection } from '../settings'
+import { getConnection } from '../settings'
 import { Eip1193Provider } from '../types'
 
 interface Props {
@@ -18,13 +18,13 @@ const SubmitTransactionsContext = createContext<(() => Promise<string>) | null>(
 export const useSubmitTransactions = () => useContext(SubmitTransactionsContext)
 
 const ProvideProvider: React.FC<Props> = ({ children }) => {
-  const { connection, chainId } = useConnection()
   const consoleHypervisorProvider = useConsoleHypervisorProvider()
 
-  const forkProvider = useMemo(
-    () =>
-      consoleHypervisorProvider &&
-      new ForkProvider(consoleHypervisorProvider, {
+  const forkProvider = useMemo(() => {
+    const { connection, chainId } = getConnection()
+
+    if (consoleHypervisorProvider)
+      return new ForkProvider(consoleHypervisorProvider, {
         consoleAddress: connection.consoleAddress,
         ownerAddress: connection.consoleOwnerAddress,
 
@@ -35,9 +35,10 @@ const ProvideProvider: React.FC<Props> = ({ children }) => {
         },
 
         async onTransactionSent(txId, transactionHash) {},
-      }),
-    [consoleHypervisorProvider, chainId, connection]
-  )
+      })
+
+    return null
+  }, [consoleHypervisorProvider])
 
   return (
     <ProviderContext.Provider value={forkProvider}>

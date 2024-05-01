@@ -1,2 +1,2 @@
-export { useConnection } from './connectionHooks'
+export { getConnection } from './connectionHooks'
 export * from './hypervisor'
