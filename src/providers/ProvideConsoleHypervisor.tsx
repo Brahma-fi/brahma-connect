@@ -95,12 +95,8 @@ export class ConsoleHypervisorProvider extends EventEmitter {
     }
 
     const provider = await this.forkProviderPromise
-    let result
-    try {
-      result = await provider.send(request.method, request.params || [])
-    } catch (e) {
-      throw e
-    }
+
+    const result = await provider.send(request.method, request.params || [])
 
     return result
   }
