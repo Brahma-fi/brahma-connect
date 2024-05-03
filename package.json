@@ -1,6 +1,6 @@
 {
   "name": "brahma-connect",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Chained execution tool for console.brahma.fi",
   "main": "index.js",
   "repository": "https://github.com/Brahma-fi/brahma-connect.git",
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "NODE_ENV=production && rimraf public/build && node esbuild.js",
     "dev": "NODE_ENV=development && node esbuild.js",
-    "bundle": "yarn build && zip -r brahma-connect.zip public"
+    "bundle": "yarn build && zip -r brahma-connect.zip public/"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
