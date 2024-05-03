@@ -3,7 +3,6 @@ import { production } from './settings'
 import { KERNEL_MESSAGE_SEPARATOR, MessageType } from './types'
 
 const ALLOWED_ORIGINS = ['https://console.brahma.fi']
-const SUPPORTED_CHAIN_IDS = ['1', '42161', '81457']
 
 window.addEventListener('message', function (ev: MessageEvent<string>) {
   console.log('message received on contentScript', ev.data)
@@ -16,7 +15,7 @@ window.addEventListener('message', function (ev: MessageEvent<string>) {
     const jwtToken = rpcConfigData[2]
 
     /// validate chainId to be int string & supported
-    if (!/^\d+$/.test(chainId) || !SUPPORTED_CHAIN_IDS.includes(chainId)) {
+    if (!/^\d+$/.test(chainId)) {
       const chainError = 'Invalid Chain ID'
       window.postMessage(
         `${MessageType.ERROR}${KERNEL_MESSAGE_SEPARATOR}${chainError}`
