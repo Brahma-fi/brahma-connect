@@ -5,17 +5,6 @@ declare let window: Window & {
   web3: { currentProvider: InjectedProvider }
 }
 
-if (window.ethereum) {
-  // There is already a provider injected
-  const descriptor = Object.getOwnPropertyDescriptor(window, 'ethereum')
-  if (descriptor?.writable === false) {
-    // We got a problem: The provider is not configurable (most probably Rabby)
-    alert(
-      `Disable Rabby by setting it to 'banned' to use Brahma Connect. Switch to an alternative wallet.`
-    )
-  }
-}
-
 const chainIdEl = document.getElementById('kernel-chain-id')
 
 if (!chainIdEl) throw new Error('Invalid chain ID')
@@ -24,10 +13,8 @@ const chainId = chainIdEl.innerHTML
 // inject bridged ethereum provider
 const injectedProvider = new InjectedProvider(chainId)
 
-window.ethereum = injectedProvider
-window.web3 = {
-  currentProvider: injectedProvider,
-}
+window.ethereum.request = injectedProvider.request
+window.web3.currentProvider.request = injectedProvider.request
 console.log('injected into', document.title, window.ethereum, window.web3)
 
 // establish message bridge for location requests
