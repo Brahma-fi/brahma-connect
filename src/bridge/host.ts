@@ -1,4 +1,9 @@
-import { Connection, Eip1193Provider } from '../types'
+import {
+  Connection,
+  Eip1193Provider,
+  KERNEL_MESSAGE_SEPARATOR,
+  MessageType,
+} from '../types'
 
 interface Request {
   method: string
@@ -39,7 +44,12 @@ export default class BridgeHost {
     ) {
       throw new Error('Expected message to originate from window')
     }
+
     this.source = event.source
+    this.source.postMessage(
+      `${MessageType.KERNEL_ACCOUNTS_CHANGED}${KERNEL_MESSAGE_SEPARATOR}${this.connection.consoleAddress}`,
+      '*'
+    )
   }
 
   private emitBridgeEvent(event: string, args: any[]) {

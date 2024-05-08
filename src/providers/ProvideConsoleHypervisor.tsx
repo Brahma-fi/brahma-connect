@@ -86,7 +86,7 @@ export class ConsoleHypervisorProvider extends EventEmitter {
       return this.blockNumber
     }
 
-    if (!this.forkProviderPromise && request.method === 'eth_sendTransaction') {
+    if (request.method === 'eth_sendTransaction') {
       // spawn a fork lazily when sending the first transaction
       this.forkProviderPromise = this.createFork(this.chainId)
     } else if (!this.forkProviderPromise) {
@@ -114,7 +114,9 @@ export class ConsoleHypervisorProvider extends EventEmitter {
   }
 
   private async createFork(networkId: number): Promise<JsonRpcProvider> {
-    const rpcUrl = `${HYPERVISOR_BASE_URL}/${this.consoleAddress}`
+    const { connection } = getConnection()
+    const rpcUrl = `${HYPERVISOR_BASE_URL}/${connection.consoleAddress}`
+    console.log('RPC URL createFork', rpcUrl)
 
     // notify the background script to start intercepting JSON RPC requests
     window.postMessage(
