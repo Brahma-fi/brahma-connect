@@ -13,8 +13,14 @@ const chainId = chainIdEl.innerHTML
 // inject bridged ethereum provider
 const injectedProvider = new InjectedProvider(chainId)
 
-window.ethereum.request = injectedProvider.request
-window.web3.currentProvider.request = injectedProvider.request
+try {
+  window.ethereum = injectedProvider
+  window.web3.currentProvider = injectedProvider
+} catch (e) {
+  console.log('error overriding provider', e)
+  window.ethereum.request = injectedProvider.request
+  window.web3.currentProvider.request = injectedProvider.request
+}
 console.log('injected into', document.title, window.ethereum, window.web3)
 
 // establish message bridge for location requests
