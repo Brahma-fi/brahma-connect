@@ -13,11 +13,12 @@ const chainId = chainIdEl.innerHTML
 // inject bridged ethereum provider
 const injectedProvider = new InjectedProvider(chainId)
 
-try {
+const descriptor = Object.getOwnPropertyDescriptor(window, 'ethereum')
+if (descriptor?.configurable) {
   window.ethereum = injectedProvider
   window.web3.currentProvider = injectedProvider
-} catch (e) {
-  console.log('error overriding provider', e)
+} else {
+  console.log('non configurable window.ethereum detected')
   window.ethereum.request = injectedProvider.request
   window.web3.currentProvider.request = injectedProvider.request
 }
