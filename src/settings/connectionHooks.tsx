@@ -9,7 +9,7 @@ declare global {
 export const getConnection = () => {
   const windowHref = window.location.href
 
-  const regex = /\/account\/([^\/]+)\/kernel/
+  const regex = /\/console\/([^\/]+)\/kernel/
   const match = regex.exec(windowHref)
 
   let consoleAddress
