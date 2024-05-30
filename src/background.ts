@@ -20,7 +20,6 @@ enum HashTypes {
 const activeExtensionTabs = new Set<number>()
 
 const startTrackingTab = (tabId: number) => {
-  console.log('------------------ start tracking tabs', tabId)
   activeExtensionTabs.add(tabId)
   updateHeadersRule()
   console.log('Kernel: started tracking tab', tabId)
@@ -90,7 +89,7 @@ const updateHeadersRule = () => {
 
 const updateRPCConfigHeadersRule = (chainId: string, jwtToken: string) => {
   const RULE_ID = 2
-  console.log('========= Active tabs', JSON.stringify(activeExtensionTabs))
+
   chrome.declarativeNetRequest.updateSessionRules(
     {
       addRules: [
@@ -138,7 +137,7 @@ const updateRPCConfigHeadersRule = (chainId: string, jwtToken: string) => {
 // When clicking the extension button, load the current tab's page in the simulation browser
 const toggle = async (tab: chrome.tabs.Tab) => {
   if (!tab.id || !tab.url) return
-  console.log(tab.id, tab.url, 'toggle')
+
   if (!tab.url.startsWith(KERNEL_URL)) {
     // add to tracked list
     startTrackingTab(tab.id)
@@ -368,16 +367,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     tab.url?.split('?')[0]?.endsWith('kernel')
   )
   const wasExtensionTab = activeExtensionTabs.has(tabId)
-  console.log(
-    isExtensionTab,
-    wasExtensionTab,
-    tab.url,
-    tab.url?.startsWith(KERNEL_URL),
-    tab.url?.split('?')[0],
-    tab.url?.split('?')[1],
-    tab.url?.split('?')[0]?.endsWith('kernel'),
-    'chrome.tabs.onUpdated.addListener'
-  )
+
   if (isExtensionTab && !wasExtensionTab) {
     startTrackingTab(tabId)
   }
