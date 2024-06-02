@@ -26,7 +26,10 @@
       "js": ["build/contentScript.js"]
     },
     {
-      "matches": ["https://console.brahma.fi/account/*/kernel"],
+      "matches": [
+        "https://console.brahma.fi/account/*/kernel",
+        "https://console.brahma.fi/account/*/subaccount/*/*/kernel"
+      ],
       "run_at": "document_idle",
       "js": ["build/introduce.js"]
     },
