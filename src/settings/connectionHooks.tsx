@@ -9,12 +9,17 @@ declare global {
 export const getConnection = () => {
   const windowHref = window.location.href
 
-  const regex = /\/account\/([^\/]+)\/kernel/
+  const regex =
+    /\/account\/(0x[a-fA-F0-9]{40})(?:\/subaccount\/(0x[a-fA-F0-9]{40}))?/
   const match = regex.exec(windowHref)
 
   let consoleAddress
 
-  if (match && match[1]) {
+  // if subaccount found use that
+  if (match && match[2]) {
+    consoleAddress = match[2]
+  } else if (match && match[1]) {
+    // just console address
     consoleAddress = match[1]
   } else {
     const connectionError = 'An error occurred with connecting account'

@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import { KERNEL_MESSAGE_SEPARATOR, MessageType } from '../types'
 
 interface JsonRpcRequest {
   method: string
@@ -57,6 +58,15 @@ export default class InjectedProvider extends EventEmitter {
       .catch((e) => console.error('eth_accounts error', e))
     this.on('accountsChanged', (accounts) => {
       this.selectedAddress = accounts[0]
+    })
+
+    window.addEventListener('message', (ev: MessageEvent) => {
+      if (
+        typeof ev.data === 'string' &&
+        ev.data.startsWith(MessageType.KERNEL_ACCOUNTS_CHANGED)
+      ) {
+        this.selectedAddress = ev.data.split(KERNEL_MESSAGE_SEPARATOR)[1]
+      }
     })
   }
 

@@ -15,10 +15,10 @@ declare let window: Window & {
 
 const BrowserFrame: React.FC<Props> = ({ src }) => {
   const provider = useProvider()
+  const { connection } = getConnection()
   const [bridgeHost, setBridgeHost] = useState<BridgeHost | null>(null)
 
   useEffect(() => {
-    const { connection } = getConnection()
     if (!provider || !connection) return
 
     if (!bridgeHost) {
@@ -27,7 +27,7 @@ const BrowserFrame: React.FC<Props> = ({ src }) => {
       bridgeHost.setProvider(provider)
       bridgeHost.setConnection(connection as any)
     }
-  }, [provider])
+  }, [provider, connection])
 
   useEffect(() => {
     if (!bridgeHost) return

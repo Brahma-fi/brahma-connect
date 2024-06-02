@@ -8,6 +8,7 @@ export enum MessageType {
   UPDATE_RPC_CONFIG = 'updateRpcConfig',
   KERNEL_SIGNATURE_REQUEST = 'kernelSignatureRequest',
   KERNEL_SIGNATURE_RESPONSE = 'kernelSignatureResponse',
+  KERNEL_ACCOUNTS_CHANGED = 'kernelAccountsChanged',
 }
 
 export enum ProviderType {

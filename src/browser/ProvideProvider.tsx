@@ -19,10 +19,9 @@ export const useSubmitTransactions = () => useContext(SubmitTransactionsContext)
 
 const ProvideProvider: React.FC<Props> = ({ children }) => {
   const consoleHypervisorProvider = useConsoleHypervisorProvider()
+  const { connection, chainId } = getConnection()
 
   const forkProvider = useMemo(() => {
-    const { connection, chainId } = getConnection()
-
     if (consoleHypervisorProvider)
       return new ForkProvider(consoleHypervisorProvider, {
         consoleAddress: connection.consoleAddress,
@@ -38,7 +37,7 @@ const ProvideProvider: React.FC<Props> = ({ children }) => {
       })
 
     return null
-  }, [consoleHypervisorProvider])
+  }, [consoleHypervisorProvider, connection, chainId])
 
   return (
     <ProviderContext.Provider value={forkProvider}>

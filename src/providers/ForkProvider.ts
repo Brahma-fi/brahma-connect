@@ -17,6 +17,7 @@ import { ConsoleHypervisorProvider } from './ProvideConsoleHypervisor'
 import { hexlify } from 'ethers/lib/utils'
 
 import { timeout } from '../utils'
+import { getConnection } from '../settings'
 
 class UnsupportedMethodError extends Error {
   code = 4200
@@ -78,18 +79,20 @@ class ForkProvider extends EventEmitter {
         return null
       }
 
-      case 'wallet_requestPermissions':
+      case 'wallet_requestPermissions': {
+        const { connection } = getConnection()
         return [
           {
             caveats: [
               {
                 type: 'restrictReturnedAccounts',
-                value: [this.consoleAddress],
+                value: [connection.consoleAddress],
               },
             ],
             date: Math.floor(new Date().getTime() / 1000),
           },
         ]
+      }
 
       case 'eth_chainId': {
         const result = await this.provider.request(request)
@@ -97,11 +100,14 @@ class ForkProvider extends EventEmitter {
       }
 
       case 'eth_requestAccounts': {
-        return [this.consoleAddress]
+        const { connection } = getConnection()
+        return [connection.consoleAddress]
       }
 
       case 'eth_accounts': {
-        return [this.consoleAddress]
+        const { connection } = getConnection()
+        console.log('eth_accounts called', connection.consoleAddress)
+        return [connection.consoleAddress]
       }
 
       // Uniswap will try to use this for ERC-20 permits, but we prefer to do a regular approval as part of the batch
@@ -109,6 +115,7 @@ class ForkProvider extends EventEmitter {
       case 'eth_signTypedData':
       case 'eth_signTypedData_v4': {
         let consoleThreshold
+        const { connection } = getConnection()
 
         try {
           consoleThreshold = parseInt(
@@ -116,7 +123,7 @@ class ForkProvider extends EventEmitter {
               method: 'eth_call',
               params: [
                 {
-                  to: this.consoleAddress,
+                  to: connection.consoleAddress,
                   data: safeInterface.encodeFunctionData('getThreshold', []),
                 },
               ],
@@ -209,12 +216,14 @@ class ForkProvider extends EventEmitter {
         }
         this.handlers.onBeforeTransactionSend(checkpointId, metaTx)
 
+        const { connection } = getConnection()
+
         const finalRequest = {
           method,
           params: [
             execTransaction(
               metaTx,
-              this.consoleAddress,
+              connection.consoleAddress,
               this.ownerAddress!,
               await this.blockGasLimitPromise
             ),
