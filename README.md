@@ -56,6 +56,10 @@ For optimal performance, use Metamask or similar wallets; Rabby and Phantom are 
    yarn build
    ```
 
+## How to use local build
+
+[Guide](https://www.notion.so/brahmafi/Running-kernel-on-localhost-468d673bfc5647b5b5b778a7bce5a0ee)
+
 ## Credits
 
 Brahma Connect's design incorporates a specific approach pioneered by the Gnosis Guild Team through their Zodiac Pilot product, focusing on recording users' transactions for a more streamlined and efficient interaction with dApps. This methodology has been pivotal in developing Brahma Connect's execution framework, enabling a more cohesive and user-friendly experience.
