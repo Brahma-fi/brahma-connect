@@ -1,4 +1,4 @@
-import { HYPERVISOR_BASE_URL } from './settings'
+import { CONDUCTOR_BASE_URL } from './settings'
 import { MessageType } from './types'
 
 // Attention: The URL must also be updated in manifest.json
@@ -106,14 +106,14 @@ const updateRPCConfigHeadersRule = (chainId: string, jwtToken: string) => {
               },
               {
                 operation: chrome.declarativeNetRequest.HeaderOperation.SET,
-                header: 'ChainID',
+                header: 'X-Chain-Id',
                 value: chainId,
               },
             ],
           },
           condition: {
             resourceTypes: ['xmlhttprequest'],
-            urlFilter: `${HYPERVISOR_BASE_URL}/*`,
+            urlFilter: `${CONDUCTOR_BASE_URL}/*`,
             tabIds: Array.from(activeExtensionTabs),
           },
         } as chrome.declarativeNetRequest.Rule,

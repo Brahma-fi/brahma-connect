@@ -6,7 +6,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { getConnection } from '../settings/connectionHooks'
 import { Eip1193Provider, JsonRpcRequest } from '../types'
 import { useBeforeUnload } from '../utils'
-import { HYPERVISOR_BASE_URL } from '../settings'
+import {
+  CONDUCTOR_BASE_URL,
+  CONDUCTOR_ENDPOINTS,
+  CONDUCTOR_RPC_URL,
+} from '../settings'
+import axios, { HttpStatusCode } from 'axios'
 
 const ConsoleHypervisorContext =
   React.createContext<ConsoleHypervisorProvider | null>(null)
@@ -115,15 +120,28 @@ export class ConsoleHypervisorProvider extends EventEmitter {
 
   private async createFork(networkId: number): Promise<JsonRpcProvider> {
     const { connection } = getConnection()
-    const rpcUrl = `${HYPERVISOR_BASE_URL}/${connection.consoleAddress}`
-    console.log('RPC URL createFork', rpcUrl)
+    const createForkEndpoint = `${CONDUCTOR_BASE_URL}/${CONDUCTOR_ENDPOINTS.createFork}/${connection.consoleAddress}`
+    const createForkError = 'An error occurred while creating fork'
+
+    try {
+      const { status } = await axios.post(createForkEndpoint)
+      if (status !== HttpStatusCode.Ok) throw new Error(createForkError)
+    } catch (err) {
+      console.error(err)
+      throw new Error(createForkError)
+    }
 
     // notify the background script to start intercepting JSON RPC requests
     window.postMessage(
-      { type: 'startSimulating', toBackground: true, networkId, rpcUrl },
+      {
+        type: 'startSimulating',
+        toBackground: true,
+        networkId,
+        rpcUrl: CONDUCTOR_RPC_URL,
+      },
       '*'
     )
 
-    return new JsonRpcProvider(rpcUrl)
+    return new JsonRpcProvider(CONDUCTOR_RPC_URL)
   }
 }
