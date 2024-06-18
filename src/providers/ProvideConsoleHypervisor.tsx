@@ -120,6 +120,7 @@ export class ConsoleHypervisorProvider extends EventEmitter {
 
   private async createFork(networkId: number): Promise<JsonRpcProvider> {
     const { connection } = getConnection()
+    const rpcUrl = `${CONDUCTOR_RPC_URL}/${connection.consoleAddress}`
     const createForkEndpoint = `${CONDUCTOR_BASE_URL}/${CONDUCTOR_ENDPOINTS.createFork}/${connection.consoleAddress}`
     const createForkError = 'An error occurred while creating fork'
 
@@ -137,11 +138,11 @@ export class ConsoleHypervisorProvider extends EventEmitter {
         type: 'startSimulating',
         toBackground: true,
         networkId,
-        rpcUrl: CONDUCTOR_RPC_URL,
+        rpcUrl,
       },
       '*'
     )
 
-    return new JsonRpcProvider(CONDUCTOR_RPC_URL)
+    return new JsonRpcProvider(rpcUrl)
   }
 }
