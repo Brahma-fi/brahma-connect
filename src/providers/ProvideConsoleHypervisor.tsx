@@ -87,8 +87,9 @@ export class ConsoleHypervisorProvider extends EventEmitter {
     if (request.method === 'evm_snapshot' || request.method === 'evm_revert')
       return
 
-    if (request.method === 'eth_blockNumber' && this.blockNumber) {
-      return this.blockNumber
+    if (request.method === 'eth_blockNumber') {
+      if (this.blockNumber) return this.blockNumber
+      this.forkProviderPromise = this.createFork(this.chainId)
     }
 
     if (request.method === 'eth_sendTransaction') {
