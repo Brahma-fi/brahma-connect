@@ -75,6 +75,17 @@ class ForkProvider extends EventEmitter {
     }
 
     switch (method) {
+      case 'console_addSubscription': {
+        const response = await this.provider.request({
+          method,
+          params,
+        })
+
+        console.log('add subscription', params, response)
+
+        return response
+      }
+
       case 'wallet_switchEthereumChain': {
         return null
       }
