@@ -1,8 +1,8 @@
-export const production = true
+export const production = false
 
 export const CONDUCTOR_BASE_URL = production
-  ? 'https://gtw.brahma.fi/v1/conductor/forks'
-  : 'https://gtw.dev.brahma.fi/v1/conductor/forks'
+  ? 'https://conductor.brahma.fi/v1/conductor/forks'
+  : 'https://conductor.dev.brahma.fi/v1/conductor/forks'
 
 export const CONDUCTOR_ENDPOINTS = {
   createFork: 'assign/connect',

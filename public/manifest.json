@@ -27,8 +27,8 @@
     },
     {
       "matches": [
-        "https://console.brahma.fi/account/*/kernel",
-        "https://console.brahma.fi/account/*/subaccount/*/*/kernel"
+        "https://dev.console.brahma.fi/account/*/kernel",
+        "https://dev.console.brahma.fi/account/*/subaccount/*/*/kernel"
       ],
       "run_at": "document_idle",
       "js": ["build/introduce.js"]

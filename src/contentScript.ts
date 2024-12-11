@@ -2,7 +2,7 @@
 import { production } from './settings'
 import { KERNEL_MESSAGE_SEPARATOR, MessageType } from './types'
 
-const ALLOWED_ORIGINS = ['https://console.brahma.fi']
+const ALLOWED_ORIGINS = ['https://dev.console.brahma.fi']
 
 window.addEventListener('message', function (ev: MessageEvent<string>) {
   console.log('message received on contentScript', ev.data)

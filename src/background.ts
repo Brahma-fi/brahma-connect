@@ -2,7 +2,7 @@ import { CONDUCTOR_BASE_URL } from './settings'
 import { MessageType } from './types'
 
 // Attention: The URL must also be updated in manifest.json
-const KERNEL_URL = 'https://console.brahma.fi/account/'
+const KERNEL_URL = 'https://dev.console.brahma.fi/account/'
 
 interface Fork {
   networkId: number
