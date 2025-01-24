@@ -79,6 +79,10 @@ class ForkProvider extends EventEmitter {
         return null
       }
 
+      case 'wallet_revokePermissions': {
+        return null
+      }
+
       case 'wallet_requestPermissions': {
         const { connection } = getConnection()
         return [

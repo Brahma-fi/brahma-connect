@@ -15,7 +15,12 @@ const injectedProvider = new InjectedProvider(chainId)
 
 const descriptor = Object.getOwnPropertyDescriptor(window, 'ethereum')
 if (descriptor?.configurable) {
-  window.ethereum = injectedProvider
+  // window.ethereum = injectedProvider
+  Object.defineProperty(window, 'ethereum', {
+    value: injectedProvider,
+    writable: false,
+    configurable: false,
+  })
   window.web3.currentProvider = injectedProvider
 } else {
   console.log('non configurable window.ethereum detected')
