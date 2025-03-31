@@ -60,7 +60,10 @@ export const overrideMetamaskAnnouncement = (provider: InjectedProvider) => {
       return
     }
 
-    if (ev.detail?.info?.rdns === 'io.metamask') {
+    if (
+      ev.detail?.info?.rdns === 'io.metamask' ||
+      ev.detail?.info?.rdns === 'io.rabby'
+    ) {
       window.dispatchEvent(
         new CustomEvent('eip6963:announceProvider', {
           detail: Object.freeze({
