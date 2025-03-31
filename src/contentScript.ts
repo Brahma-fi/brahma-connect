@@ -1,3 +1,4 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { production } from './settings'
 import { KERNEL_MESSAGE_SEPARATOR, MessageType } from './types'

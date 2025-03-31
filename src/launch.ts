@@ -1,4 +1,5 @@
 async function waitForElement(selector: string, interval = 1000) {
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const element = document.querySelector(selector)
     if (element) {

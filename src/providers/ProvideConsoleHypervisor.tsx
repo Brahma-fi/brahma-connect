@@ -81,7 +81,8 @@ export class ConsoleHypervisorProvider extends EventEmitter {
     console.log('request in consoleHypervisor prov', request)
     if (request.method === 'eth_chainId') {
       // WalletConnect seems to return a number even though it must be a string value, we patch this bug here
-      return `0x${this.chainId.toString(16)}`
+      if (this.chainId) return `0x${this.chainId.toString(16)}`
+      this.forkProviderPromise = this.createFork(this.chainId)
     }
 
     if (request.method === 'evm_snapshot' || request.method === 'evm_revert')
